@@ -1,4 +1,9 @@
-/* global THREE */
+// modified by @upisfree into ES6 module & three.js ES6 import
+// https://github.com/upisfree/buffered-interpolation/blob/master/index.js
+import {
+  Vector3,
+  Quaternion
+} from 'three';
 
 const INITIALIZING = 0;
 const BUFFERING = 1;
@@ -11,14 +16,14 @@ const vectorPool = [];
 const quatPool = [];
 const framePool = [];
 
-const getPooledVector = () => vectorPool.shift() || new THREE.Vector3();
-const getPooledQuaternion = () => quatPool.shift() || new THREE.Quaternion();
+const getPooledVector = () => vectorPool.shift() || new Vector3();
+const getPooledQuaternion = () => quatPool.shift() || new Quaternion();
 
 const getPooledFrame = () => {
   let frame = framePool.pop();
 
   if (!frame) {
-    frame = { position: new THREE.Vector3(), velocity: new THREE.Vector3(), scale: new THREE.Vector3(), quaternion: new THREE.Quaternion(), time: 0 };
+    frame = { position: new Vector3(), velocity: new Vector3(), scale: new Vector3(), quaternion: new Quaternion(), time: 0 };
   }
 
   return frame;
@@ -27,6 +32,13 @@ const getPooledFrame = () => {
 const freeFrame = f => framePool.push(f);
 
 class InterpolationBuffer {
+  static MODE_LERP = MODE_LERP;
+  static MODE_HERMITE = MODE_HERMITE;
+
+  static INITIALIZING = INITIALIZING;
+  static BUFFERING = BUFFERING;
+  static PLAYING = PLAYING;
+
   constructor(mode = MODE_LERP, bufferTime = 0.15) {
     this.state = INITIALIZING;
     this.buffer = [];
@@ -35,9 +47,9 @@ class InterpolationBuffer {
     this.mode = mode;
 
     this.originFrame = getPooledFrame();
-    this.position = new THREE.Vector3();
-    this.quaternion = new THREE.Quaternion();
-    this.scale = new THREE.Vector3(1, 1, 1);
+    this.position = new Vector3();
+    this.quaternion = new Quaternion();
+    this.scale = new Vector3(1, 1, 1);
   }
 
   hermite(target, t, p1, p2, v1, v2) {
@@ -190,4 +202,4 @@ class InterpolationBuffer {
   }
 }
 
-module.exports = InterpolationBuffer;
+export default InterpolationBuffer;
