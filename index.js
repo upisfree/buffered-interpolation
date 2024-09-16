@@ -39,10 +39,10 @@ class InterpolationBuffer {
   static BUFFERING = BUFFERING;
   static PLAYING = PLAYING;
 
-  constructor(mode = MODE_LERP, bufferTime = 0.15) {
+  constructor(mode = MODE_LERP, bufferTime = 150) {
     this.state = INITIALIZING;
     this.buffer = [];
-    this.bufferTime = bufferTime * 1000;
+    this.bufferTime = bufferTime;
     this.time = 0;
     this.mode = mode;
 
